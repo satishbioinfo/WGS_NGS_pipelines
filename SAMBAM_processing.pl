@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 ### Author: Satishkumar R G #####
+### bioinformatics (dot) satish (at)gmail (dot)com #####
+
 ### Script Description: Perform preparation of mapped file in sam format for downstream analysis #####
 #### This script also creates the mpileup folder with mpileup for variant calling #########
 ############################################################################
