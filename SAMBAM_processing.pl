@@ -14,12 +14,13 @@ exit(main());
 
 sub main{
 my $settings={};
-GetOptions ($settings, qw (idir=s odir=s stats=s ref=s));
+GetOptions ($settings, qw (idir=s odir=s stats=s ref=s tool=s));
 my $indir = $$settings{idir} or die usage ();
 my $outdir = $$settings{odir} or die usage ();
 my $stats = $$settings{stats} or die usage();
 my $ref = $$settings{ref} or die usage();
-sambam ($indir, $outdir, $stats, $ref);
+my $toolpath = $$settings{tool} or die usage();
+sambam ($indir, $outdir, $stats, $ref, $toolpath);
 return 0;
 }
 
@@ -29,12 +30,14 @@ return 0;
 
 sub sambam{
 
-my ($indir, $outdir, $stats, $ref)=@_;
+my ($indir, $outdir, $stats, $ref, $toolpath)=@_;
 
 ########################################
 ### Creating a Stats file to capture all mapping stats ##
 ########################################
 chomp ($stats);
+chomp ($toolpath);
+
 my $statsout = $outdir.$stats.".txt";
 
 open (OUT, ">>$statsout") or die "Can't open $!";
@@ -87,23 +90,25 @@ my $inp = $indir.$a[0].".sam";
 my $of = $bmfold."/".$a[0].".bam";
 my $ofs = $bmfold."/".$a[0]."_sorted.bam";
 
+my $samtool = $toolpath."samtools";
+
 ####################################################
 
 ###### To customize the script: Add your BWA Path here ####################
 
-system ("/home/satishk/samtools-1.6/samtools view -bS $inp >$of");
-system ("/home/satishk/samtools-1.6/samtools sort $of -o $ofs");
+system ("$samtool view -bS $inp >$of");
+system ("$samtool sort $of -o $ofs");
 
 ############################################################
 ################ Adding Statistics to the stats file #######
 ############################################################
-$totreads=`/home/satishk/samtools-1.6/samtools view -c $ofs`;
+$totreads=`$samtool view -c $ofs`;
 $totreads=~s/\s//g;
 
-$mappedreads=`/home/satishk/samtools-1.6/samtools view -c -F 4 $ofs`;
+$mappedreads=`$samtool view -c -F 4 $ofs`;
 $mappedreads=~s/\s//g;
 
-$unmapreads=`/home/satishk/samtools-1.6/samtools view -c -f 4 $ofs`;
+$unmapreads=`$samtool view -c -f 4 $ofs`;
 $unmapreads=~s/\s//g;
 
 my $mapper=(($mappedreads/$totreads)*100);
@@ -123,7 +128,7 @@ print OUT $a[0]."\t".$totreads."\t".$mappedreads."\t".$unmapreads."\t".$mapper."
 
 my $mpileout = $mpfold."/".$a[0].".mpileup";
 
-system ("/home/satishk/samtools-1.6/samtools mpileup -f $ref $ofs >$mpileout");
+system ("$samtool mpileup -f $ref $ofs >$mpileout");
 
 print "Completed Mapping Sample :".$a[0]."\n";
 }
@@ -132,5 +137,9 @@ return 1;
 
 sub usage{
 "Performing Sam file processing
+Instruction:
+##please provide the entire path where you have installed samtools
+## example
+
 Usage $0 -i <Input folder> -o <Output Folder> -s <Mapping Summary name> -r <reference path>";
 }
