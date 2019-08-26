@@ -139,7 +139,8 @@ sub usage{
 "Performing Sam file processing
 Instruction:
 ##please provide the entire path where you have installed samtools
-## example
+## example /home/satishk/samTools1.6/
 
-Usage $0 -i <Input folder> -o <Output Folder> -s <Mapping Summary name> -r <reference path>";
+
+Usage $0 -i <Input folder> -o <Output Folder> -s <Mapping Summary name> -r <reference path> -t <tool path for Samtools>";
 }
