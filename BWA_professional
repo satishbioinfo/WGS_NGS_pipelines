@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 ### Author: Satishkumar R G #####
+### bioinformatics (dot) satish (at)gmail (dot)com #####
+
 ### Script Description: Performs mapping of Paired End data reads to the reference #####
 #######################################################
 
