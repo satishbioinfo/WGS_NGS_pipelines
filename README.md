@@ -1,4 +1,5 @@
-# NGS_pipelines
+# Whole Genome or Exome NGS_pipelines
+
 Scripts to Run various NGSdata analysis analysis steps such:
 
 1) Read reference mapping - Using BWA
